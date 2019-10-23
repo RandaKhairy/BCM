@@ -130,17 +130,13 @@ void BCM_TxDispatch(void)
 	switch (g_state)
 	{
 	case IDLE:
-		//PORTB |=(1<<PB0);
 		data_counter = 0;
 		Tx_Frame_data_counter = 0;
 		break;
 	case SENDING_BYTE:
 	{
-		//PORTB |=(1<<PB1);
-		//PORTB &=~(1<<PB2);
 		g_Sending_complete_flag=0;
 		Tx_Frame_data_counter++;
-       // LCD_intgerToString(Tx_Frame_data_counter);
 		if(Tx_Frame_data_counter==1)
 		{
 			UART_sendByte(Tx_buffer.ID);
@@ -179,8 +175,6 @@ void BCM_TxDispatch(void)
 	case SENDING_BYTE_COMPLETE:
 	{
 		g_Sending_complete_flag=0;
-		PORTB |=(1<<PB2);
-		PORTB &=~(1<<PB1);
 		if(data_counter == Tx_buffer.data_size)
 		{
 			//send checksum
@@ -197,7 +191,6 @@ void BCM_TxDispatch(void)
 	break;
 	case SENDING_FRAME_COMPLETE:
 	{
-		PORTB |=(1<<PB3);
 
 		//data send call back function
 		dispatcherStatus = Sending_frame_success;
